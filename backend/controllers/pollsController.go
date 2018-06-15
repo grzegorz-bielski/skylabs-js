@@ -41,7 +41,7 @@ func (ps PollsController) GetPoll(res http.ResponseWriter, req *http.Request) {
 
 	poll, err := ps.pollsService.GetPoll(models.PollsHash + vars["pollID"])
 	if err != nil {
-		res.WriteHeader(http.StatusInternalServerError)
+		res.WriteHeader(http.StatusNotFound)
 		return
 	}
 
