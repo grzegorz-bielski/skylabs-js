@@ -1,8 +1,8 @@
 package models
 
 const (
-	VotesHashID = "VotesHashID"
-	VotesHash   = "VotesHash"
+	VotesID   = "VotesID"
+	VotesHash = "VotesHash"
 )
 
 type Vote struct {

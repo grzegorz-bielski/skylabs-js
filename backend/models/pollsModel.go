@@ -1,8 +1,8 @@
 package models
 
 const (
-	PollsHashID = "PollsHashID"
-	PollsHash   = "PollsHash"
+	PollsID   = "PollsID"
+	PollsHash = "PollsHash"
 )
 
 type Poll struct {

@@ -3,9 +3,11 @@ package services
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strconv"
 
 	"github.com/go-redis/redis"
+
 	"github.com/skygate/skylabs-js/backend/models"
 )
 
@@ -20,12 +22,12 @@ func NewPollsService(dbClient *redis.Client) *PollsService {
 }
 
 func (ps PollsService) CreatePoll(poll models.Poll) ([]byte, error) {
-	pollID, _ := ps.dbClient.Incr(models.PollsHashID).Result()
+	pollID, _ := ps.dbClient.Incr(models.PollsID).Result()
 	poll.ID = pollID
 
 	var votes []models.Vote
 	for _, vote := range poll.Votes {
-		voteID, _ := ps.dbClient.Incr(models.VotesHashID).Result()
+		voteID, _ := ps.dbClient.Incr(models.VotesID).Result()
 		vote.ID = voteID
 		vote.PollID = pollID
 		votes = append(votes, vote)
@@ -38,6 +40,7 @@ func (ps PollsService) CreatePoll(poll models.Poll) ([]byte, error) {
 func (ps PollsService) GetPoll(ID string) (models.Poll, error) {
 	var poll models.Poll
 	jsonPoll, err := ps.dbClient.Get(ID).Result()
+	fmt.Println(jsonPoll)
 	if err != nil {
 		return poll, err
 	}
@@ -48,6 +51,7 @@ func (ps PollsService) GetPoll(ID string) (models.Poll, error) {
 func (ps PollsService) GetPolls() ([]models.Poll, error) {
 	var polls []models.Poll
 	keys, _, err := ps.dbClient.Scan(0, models.PollsHash+"*", 1000).Result()
+	fmt.Println(keys)
 	if err != nil || len(keys) <= 0 {
 		return polls, errors.New("Not Found")
 	}

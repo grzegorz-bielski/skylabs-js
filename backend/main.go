@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/skygate/skylabs-js/backend/services"
-
 	"github.com/go-redis/redis"
 	"github.com/gorilla/mux"
+
 	"github.com/skygate/skylabs-js/backend/controllers"
+	"github.com/skygate/skylabs-js/backend/services"
 )
 
 var (
