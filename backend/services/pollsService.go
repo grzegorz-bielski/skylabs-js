@@ -58,11 +58,6 @@ func (ps PollsService) GetPolls() ([]models.Poll, error) {
 			return polls, nil
 		}
 
-		// js, _ := json.Marshal(poll)
-		// fmt.Println(js)
-
-		// fmt.Println("CALLED")
-
 		polls = append(polls, poll)
 	}
 
