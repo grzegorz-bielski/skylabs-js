@@ -11,4 +11,3 @@ ADD . .
 RUN dep ensure --vendor-only
 
 CMD ["fresh"]
-
