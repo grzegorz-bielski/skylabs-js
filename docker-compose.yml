@@ -1,0 +1,19 @@
+version: '3.5'
+
+services:
+
+  backend:
+    build: 
+      context: .
+      dockerfile: prod.Dockerfile
+    restart: always
+    volumes:
+      - .:/go/src/github.com/skygate/skylabs-js
+    ports:
+      - $HOSTPORT:3000
+
+
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379
