@@ -4,9 +4,6 @@ services:
 
   backend:
     build: 
-      context: ./backend
+      context: .
       dockerfile: dev.Dockerfile
 
-  nginx:
-    ports:
-      - 8000:80

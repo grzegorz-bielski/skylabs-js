@@ -3,12 +3,11 @@ package services
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"strconv"
 
 	"github.com/go-redis/redis"
 
-	"github.com/skygate/skylabs-js/backend/models"
+	"github.com/skygate/skylabs-js/models"
 )
 
 type PollsService struct {
@@ -40,18 +39,17 @@ func (ps PollsService) CreatePoll(poll models.Poll) ([]byte, error) {
 func (ps PollsService) GetPoll(ID string) (models.Poll, error) {
 	var poll models.Poll
 	jsonPoll, err := ps.dbClient.Get(ID).Result()
-	fmt.Println(jsonPoll)
 	if err != nil {
 		return poll, err
 	}
 	err = json.Unmarshal([]byte(jsonPoll), &poll)
+
 	return poll, err
 }
 
 func (ps PollsService) GetPolls() ([]models.Poll, error) {
 	var polls []models.Poll
 	keys, _, err := ps.dbClient.Scan(0, models.PollsHash+"*", 1000).Result()
-	fmt.Println(keys)
 	if err != nil || len(keys) <= 0 {
 		return polls, errors.New("Not Found")
 	}

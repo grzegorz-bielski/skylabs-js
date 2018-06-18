@@ -8,8 +8,8 @@ import (
 	"github.com/go-redis/redis"
 	"github.com/gorilla/mux"
 
-	"github.com/skygate/skylabs-js/backend/controllers"
-	"github.com/skygate/skylabs-js/backend/services"
+	"github.com/skygate/skylabs-js/controllers"
+	"github.com/skygate/skylabs-js/services"
 )
 
 var (

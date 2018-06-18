@@ -4,21 +4,16 @@ services:
 
   backend:
     build: 
-      context: ./backend
+      context: .
       dockerfile: prod.Dockerfile
     restart: always
     volumes:
-      - ./backend:/go/src/github.com/skygate/skylabs-js/backend
+      - .:/go/src/github.com/skygate/skylabs-js
+    ports:
+      - $HOSTPORT:3000
+
 
   redis:
     image: redis:alpine
     ports:
       - 6379:6379
-
-  nginx:
-    build: ./nginx
-    restart: always
-    depends_on:
-      - backend
-    ports:
-      - 80:80

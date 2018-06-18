@@ -5,8 +5,8 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/skygate/skylabs-js/backend/models"
-	"github.com/skygate/skylabs-js/backend/services"
+	"github.com/skygate/skylabs-js/models"
+	"github.com/skygate/skylabs-js/services"
 )
 
 type VotesController struct {

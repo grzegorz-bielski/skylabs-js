@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/skygate/skylabs-js/backend/models"
+	"github.com/skygate/skylabs-js/models"
 )
 
 type VotesService struct{}
