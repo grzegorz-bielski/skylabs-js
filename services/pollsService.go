@@ -3,6 +3,7 @@ package services
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strconv"
 
 	"github.com/go-redis/redis"
@@ -23,6 +24,7 @@ func NewPollsService(dbClient *redis.Client) *PollsService {
 func (ps PollsService) CreatePoll(poll models.Poll) ([]byte, error) {
 	pollID, _ := ps.dbClient.Incr(models.PollsID).Result()
 	poll.ID = pollID
+	// poll.CreatedAt = models.JSONTime()
 
 	var votes []models.Vote
 	for _, vote := range poll.Votes {
@@ -43,6 +45,8 @@ func (ps PollsService) GetPoll(ID string) (models.Poll, error) {
 		return poll, err
 	}
 	err = json.Unmarshal([]byte(jsonPoll), &poll)
+
+	fmt.Println(poll.CreatedAt)
 
 	return poll, err
 }
@@ -72,13 +76,16 @@ func (ps PollsService) DeletePoll(ID string) error {
 		return err
 	}
 
-	var voteIDs []string
-	for _, vote := range poll.Votes {
-		voteIDs = append(voteIDs, strconv.FormatInt(vote.ID, 10))
-	}
-	err = ps.dbClient.Del(voteIDs...).Err()
-	if err != nil {
-		return err
+	if poll.Votes != nil {
+		var voteIDs []string
+		for _, vote := range poll.Votes {
+			voteIDs = append(voteIDs, strconv.FormatInt(vote.ID, 10))
+		}
+		err = ps.dbClient.Del(voteIDs...).Err()
+		fmt.Println(err)
+		if err != nil {
+			return err
+		}
 	}
 
 	return ps.dbClient.Del(ID).Err()

@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
+	"time"
 
 	"github.com/gorilla/mux"
 
@@ -21,9 +23,39 @@ func NewPollsController(pollsService *services.PollsService) *PollsController {
 	}
 }
 
+func (ps PollsController) validatePoll(poll models.Poll) []string {
+	var errorMsg []string
+	if poll.Question == "" {
+		errorMsg = append(errorMsg, "no question")
+	}
+	if poll.Votes == nil {
+		errorMsg = append(errorMsg, "no votes")
+	}
+	if poll.Votes != nil {
+		for _, vote := range poll.Votes {
+			if vote.Name == "" {
+				errorMsg = append(errorMsg, "no vote name")
+				break
+			}
+		}
+	}
+
+	return errorMsg
+}
+
 func (ps PollsController) AddPoll(res http.ResponseWriter, req *http.Request) {
-	poll := models.Poll{}
+	poll := models.Poll{
+		CreatedAt: models.JSONTime(time.Now()),
+	}
 	json.NewDecoder(req.Body).Decode(&poll)
+
+	errorMsg := ps.validatePoll(poll)
+
+	if len(errorMsg) > 0 {
+		res.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(res, "%s\n", "Error(s): "+strings.Join(errorMsg, ", "))
+		return
+	}
 
 	jsonPoll, err := ps.pollsService.CreatePoll(poll)
 	if err != nil {

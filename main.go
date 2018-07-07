@@ -23,6 +23,8 @@ func main() {
 		DB:   0,
 	})
 
+	// client.FlushAll()
+
 	pollsService := services.NewPollsService(client)
 	votesService := services.NewVotesService()
 
