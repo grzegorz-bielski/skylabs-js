@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-redis/redis"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 
 	"github.com/skygate/skylabs-js/controllers"
 	"github.com/skygate/skylabs-js/services"
@@ -41,7 +42,9 @@ func main() {
 	router.HandleFunc(prefix+"/polls/{pollID:[0-9]+}/votes/{voteID:[0-9]+}", votesController.UpVote).Methods(http.MethodPost)
 	router.HandleFunc(prefix+"/polls/{pollID:[0-9]+}/votes/{voteID:[0-9]+}", votesController.DownVote).Methods(http.MethodDelete)
 
-	if err := http.ListenAndServe(":"+port, router); err != nil {
+	handler := cors.Default().Handler(router)
+
+	if err := http.ListenAndServe(":"+port, handler); err != nil {
 		panic(err)
 	}
 
